@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+	<title>Home</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.5/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-animate.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+
+	<style >
+		.headimg{
+
+			width: 100%;
+			height: 300px;
+      
+			 
+		}
+	</style>
+</head>
+<body ng-view >
+
+
+
+	
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="index.html">NishenBlog</a>
+
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo03" >
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+      <li class="nav-item active">
+        <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="feed/feed.html">Feed Back</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link " href="about/about.html">About-Us</a>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0" action="log.php" method="post">
+      <input class="form-control mr-sm-2" type="text" name="user" placeholder="UserName" aria-label="Search" required>
+      <input class="form-control mr-sm-2" type="Password" name="pass" placeholder="Password" aria-label="Search"  required>
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit" >LOG</button>
+
+    </form>
+  </div><br>
+  
+</nav>
+<div class="headimg"   ><img src="image/head3.jpg"  height="400px" width="100%"></div><br><br><br><br><br><hr><br>
+
+
+<div class="container" ng-controller="myCtrl" ng-init="show()">
+ 	<div class="row">
+ 		<h1>RECENT POST</h1>
+ 		
+ 		
+
+ 		
+ 	</div>
+
+ 	<div class="row" >
+    
+ 		<table class="table table-bordered  table-striped">
+              					
+              					<tr ng-repeat="b in names" >
+              						<td><img ng-src="admin/upload/{{b.photo}}" width="160px" height="160px"></td>
+              						<td><h3>{{b.Heading}}</h3><br><br><a href="#!article{{b.Heading}}"><button type="button" class="btn btn-secondary" >View More</button></a></td>
+
+              						
+              						
+
+              					</tr>
+
+              					
+              				</table>
+
+              				        
+              						
+              					
+
+
+
+
+  
+     
+
+
+
+
+
+
+
+      </div><br><br>
+
+
+
+     </div>
+
+     <footer id="footer">
+       <div class="footer-top" style="background-color: #AAB7B8  ; height: 40px; color: white; text-align: center;">
+        <P class="copyright text-muted">Copyright &copy; NishenBlog 2018</P> 
+         
+       </div>
+     </footer>
+
+
+
+
+
+
+ 	
+ 	</div>
+
+  </div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+
+
+<script >
+	
+var myApp = angular.module('myApp', ["ngRoute"]);
+
+myApp.config(function($routeProvider) {
+    $routeProvider
+    .when("/", {
+        templateUrl : "index.html",
+        
+    })
+    .when("/admin", {
+        templateUrl : "admin/admin.html",
+        
+    })
+    .when("/article:n", {
+        templateUrl : "articleviewer/articleview.html",
+        controller : "article"
+    });
+     
+    
+});
+
+myApp.controller("article",['$scope','$routeParams','$http', function ($scope,$routeParams,$http) {
+    
+    $scope.ne=$routeParams.n;
+
+
+  $http.post("selectarticle.php", {
+    'ne':$routeParams.n,
+    
+    })       
+
+.then(function(response){
+ 
+
+    
+   console.log(response.data);
+   $scope.name=response.data;
+
+
+
+   
+   
+
+
+
+
+
+
+
+})
+
+
+
+
+
+
+
+
+    
+}]);
+
+
+
+
+
+
+
+
+myApp.controller("myCtrl",function($scope,$http,$interval,$timeout){
+
+
+
+$scope.show=function(){
+
+
+	
+
+
+	$http({method: 'GET',url:'admin/selectarticle.php',})
+
+	.then(function (response){
+
+
+     $scope.names=response.data.records;
+	 
+	 //console.log($scope.names);
+
+
+
+   });
+}
+
+$interval(function(){
+
+   $scope.show();
+
+
+
+},1000)
+
+
+
+
+$scope.viewarticle=function(heading){
+
+  
+
+	 $http.post("selectarticle.php", {
+    'heading':heading,
+    
+    })       
+
+.then(function(response){
+ 
+
+    
+   console.log(response.data);
+   $scope.name=response.data;
+
+
+
+   
+   
+
+
+
+
+
+
+
+})
+
+
+   
+
+
+
+}
+
+
+
+
+
+
+
+
+})
+
+
+
+
+</script>
+
+
+
+
+
+
+
+</body>
+</html>

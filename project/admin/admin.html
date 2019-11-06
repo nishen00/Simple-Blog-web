@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+	<title>Admin page</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	
+
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.5/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-animate.js"></script>
+	<style >
+		input.ng-invalid.ng-touched
+{
+
+    border: 3px solid #CD6155;
+
+}
+	</style>
+</head>
+<body >
+ <div class="container" ">
+ 	<div class="row">
+ 		<div class="col-md-12" style="background-color:#424949; height: 40px; "><h3 style="color: white;">Admin Dashboard</h3></div>
+ 		
+ 		
+
+ 		
+ 	</div><br>
+ 	<div class="row">
+ 		<div class="col-md-12" style="height: 80px; " >
+ 			
+         <ul class="nav nav-pills nav-justified">
+
+ 				<li class="nav-item"><a href="#feedback" class="nav-link active" data-toggle="tab">Feed Back</a></li>
+ 				<li class="nav-item"><a href="#articles" class="nav-link" data-toggle="tab">Add Articles</a></li>
+ 				
+ 				
+ 				
+ 	     </ul><br>
+
+
+
+
+
+
+
+              <div class="tab-content">
+              	<div role="tabpanel" class="tab-pane fade in active" id="feedback" ng-controller="comment" ng-init="showcomment()">
+              		
+              			
+              				
+              				<table class="table table-bordered  table-striped" >
+              					<tr>
+              					<th>ID</th>
+              					<th>User Name</th>
+              					<th>Comment</th>
+                        <th>Date and Time</th>
+                        <th>Delete</th>
+              					</tr>
+              					<tr ng-repeat="bc in comment">
+              						<td>{{bc.commentID}}</td>
+              						<td>{{bc.UserName}}</td>
+              						<td>{{bc.Comment}}</td>
+                          <td>{{bc.DateAndTime}}</td>
+                          <td><button type="button" class="btn  btn-secondary " ng-disabled="userfeed.$invalid" ng-click="deletecomment(bc.commentID)" >Delete</button></td>
+
+              					</tr>
+              					
+              				</table>
+              				
+              			
+              		
+              	</div>
+              	<div role="tabpanel" class="tab-pane fade in " id="articles" ng-controller="myCtrl" >
+              		
+              		
+              		<form name="addarticle">
+    <div class="form-group">
+
+      <label for="usr"> Heading Name:</label>
+      <input type="text" class="form-control" ng-model="Heading" ng-required="true" >
+    </div>
+    
+
+    <div class="form-group">
+      <label for="comment">Article:</label>
+      <textarea class="form-control" rows="15" ng-model="article" ng-required="true" ></textarea>
+    </div>
+    <label for="usr"> Select photo:</label>
+      <input type="file" file-model="myFile1" ng-model="pic" ><br><br>
+      
+
+
+      <button type="button" class="btn btn-secondary btn-lg" ng-disabled="addarticle.$invalid" ng-click="uploadFile()" >Add Article</button>
+
+   
+  </form><br><br>
+
+<div ng-controller="myCtrl2" ng-init="show()">
+  <table class="table table-bordered  table-striped">
+              					<tr>
+              					<th>ID</th>
+              					<th>Heading</th>
+              					<th>Article</th>
+              					<th>Photo</th>
+              					<th>Delete</th>
+              					</tr>
+              					<tr ng-repeat="b in names">
+              						<td>{{b.id}}</td>
+              						<td>{{b.Heading}}</td>
+              						<td>{{b.Article}}</td>
+              						<td><img ng-src="upload/{{b.photo}}" width="130px" height="130px"></td>
+              						<td><button type="button" class="btn btn-primary btn-lg" ng-click="deletearticle(b.id)">delete</button></td>
+
+              						
+
+              					</tr>
+              					
+              				</table>
+
+
+</div>
+              	</div>
+              	<div role="tabpanel" class="tab-pane fade in " id="advertistment">ad</div>
+
+
+              </div>
+
+
+
+
+ 		</div>
+ 		
+ 			
+ 			
+
+ 			
+ 		
+ 	</div>
+ 	
+   
+
+
+ 	
+
+ </div>
+
+
+
+
+
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+
+
+
+
+
+<script >
+	
+	var myApp = angular.module('myApp', []);
+
+	myApp.directive('fileModel', ['$parse', function ($parse) {
+    return {
+    restrict: 'A',
+    link: function(scope, element, attrs) {
+        var model = $parse(attrs.fileModel);
+        var modelSetter = model.assign;
+
+        element.bind('change', function(){
+            scope.$apply(function(){
+                modelSetter(scope, element[0].files[0]);
+            });
+        });
+    }
+   };
+}]);
+
+
+
+	myApp.service('fileUpload', ['$http', function ($http) {
+    this.uploadFileToUrl = function(file, uploadUrl,Heading,article){
+         var fd = new FormData();
+         fd.append('file', file);
+         fd.append('Heading', Heading);
+         fd.append('article', article);
+         $http.post(uploadUrl, fd, {
+             transformRequest: angular.identity,
+             headers: {'Content-Type': undefined,'Process-Data': false}
+         })
+         
+     }
+ }]);
+
+
+	 myApp.controller('myCtrl', ['$scope', 'fileUpload', function($scope, fileUpload){
+
+
+
+   $scope.uploadFile = function(){
+        var file1 = $scope.myFile1;
+        
+        
+        console.log('file is ' );
+        console.dir(file1);
+        
+
+        var uploadUrl = "artsave.php";
+        var Heading = $scope.Heading;
+        var article = $scope.article;
+        fileUpload.uploadFileToUrl(file1, uploadUrl, Heading,article);
+
+        alert("insert completed..");
+        $scope.Heading="";
+        $scope.article="";
+        $scope.pic="";
+
+        
+       
+        
+        
+   }
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+}])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	 myApp.controller("myCtrl2",function($scope,$http,$interval){
+
+
+$scope.show=function(){
+
+
+	
+
+
+	$http({method: 'GET',url:'selectarticle.php',})
+
+	.then(function (response){
+
+
+     $scope.names=response.data.records;
+
+
+
+   });
+}
+
+
+
+
+
+$interval(function(){
+
+   $scope.show();
+
+
+
+},1000)
+
+
+
+
+
+
+$scope.deletearticle=function(Id){
+
+
+   
+   	if(confirm("Are you sure you want to delete?"))
+   	{
+
+          $http.post("articledelete.php", {
+    'Id':Id,
+    
+    })       
+
+.then(function(response){
+ 
+
+    alert("Delete completed..");
+   console.log("Data delete Successfully");
+   
+   
+   
+    
+
+
+   
+
+
+   
+
+
+
+
+
+
+ }) 
+
+   	}
+   	else{
+   		return false;
+   	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	 });
+
+myApp.controller("comment", function ($scope,$http,$interval) {
+
+
+
+  $scope.showcomment=function(){
+
+
+
+$http({method: 'GET',url:'commentselect.php',})
+
+  .then(function (response){
+
+
+     $scope.comment=response.data.records;
+
+
+
+   });
+
+
+
+
+
+
+
+
+
+
+
+
+
+  }
+  $interval(function(){
+
+   $scope.showcomment();
+
+
+
+},1000)
+
+  $scope.deletecomment=function(commentID){
+
+
+
+
+    if(confirm("Are you sure you want to delete?"))
+    {
+
+          $http.post("commentdelete.php", {
+    'commentID':commentID,
+    
+    })       
+
+.then(function(response){
+ 
+
+    alert("Delete completed..");
+   console.log("Data delete Successfully");
+   
+   
+   
+    
+
+
+   
+
+
+   
+
+
+
+
+
+
+ }) 
+
+    }
+    else{
+      return false;
+    }
+
+
+
+
+      
+
+  }
+
+
+
+
+
+
+
+
+})
+
+
+
+
+
+
+
+</script>
+
+
+</body>
+</html>

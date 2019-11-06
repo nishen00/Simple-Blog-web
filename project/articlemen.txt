@@ -1,0 +1,5 @@
+email:articlemen123@gmail.com
+password:DjEmmaBhanukaarticlemen
+dbusername:id8260765_articlemennishen
+dbpassword:DjEmmaBhanuka
+dbName:id8260765_articlemen
